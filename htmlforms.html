@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lost Guys' CC Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url('https://cdn.discordapp.com/attachments/1224329431347363901/1256729007660204062/InShot_20240628_233324382_1.jpg?ex=6681d398&is=66808218&hm=807a6aa29e35e57378304e82d8cc297363eadcb7f43b64c4563d7347d3e9841d&') no-repeat center center fixed;
+            background-size: cover;
+            color: #ffffff; /* White text */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            max-width: 800px; /* Wider */
+            width: 90%; /* Added for centering */
+            padding: 30px; /* More space */
+            background: rgba(51, 51, 51, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #ffffff;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-bottom: 10px; /* More space between labels */
+        }
+        input, select, textarea {
+            margin-bottom: 20px; /* More space between inputs */
+            padding: 15px; /* Larger */
+            border: none;
+            border-radius: 5px;
+            background: #444;
+            color: #ffffff; /* White text */
+            font-size: 18px; /* Larger */
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* Light shadow */
+        }
+        input[type="checkbox"] {
+            margin-bottom: 10px; /* Space between checkboxes */
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            background: #555;
+        }
+        button {
+            padding: 15px 20px; /* Larger */
+            font-size: 18px; /* Larger */
+            background-color: #007BFF;
+            color: #ffffff; /* White text */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .platform-options {
+            display: none;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            order: -1; /* Position the label above */
+        }
+        .message {
+            text-align: center;
+            color: #00FF00; /* Green color for the success message */
+            display: none; /* Hidden by default */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Lost Guys' CC Form</h1>
+        <form id="contact-form" action="http://localhost:3000/submit-form" method="post">
+            <div class="form-group">
+                <label for="name">Discord username:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="social-names">Social Names:</label>
+                <input type="text" id="social-names" name="social-names" required>
+            </div>
+            <div class="form-group">
+                <label for="age">Age:</label>
+                <input type="number" id="age" name="age" required>
+            </div>
+            <div class="form-group">
+                <label for="content-type">What platform do you publish/stream on:</label>
+                <select id="content-type" name="content-type" required>
+                    <option value="" disabled selected>Select one</option>
+                    <option value="publish">Publish</option>
+                    <option value="stream">Stream</option>
+                </select>
+            </div>
+            <div id="publish-options" class="platform-options">
+                <label for="publish-platform">Select your publish platform(s):</label>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="publish-tiktok" name="publish-platform" value="tiktok">
+                    <label for="publish-tiktok">TikTok</label><br>
+                    <input type="checkbox" id="publish-youtube" name="publish-platform" value="youtube">
+                    <label for="publish-youtube">YouTube</label><br>
+                </div>
+            </div>
+            <div id="stream-options" class="platform-options">
+                <label for="stream-platform">Select your stream platform(s):</label>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="stream-tiktok" name="stream-platform" value="tiktok">
+                    <label for="stream-tiktok">TikTok</label><br>
+                    <input type="checkbox" id="stream-youtube" name="stream-platform" value="youtube">
+                    <label for="stream-youtube">YouTube</label><br>
+                    <input type="checkbox" id="stream-twitch" name="stream-platform" value="twitch">
+                    <label for="stream-twitch">Twitch</label><br>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="message">Why do you want to become CC?</label>
+                <textarea id="message" name="message" rows="2" required></textarea>
+            </div>
+            <div class="form-group">
+                <button type="submit">Submit</button>
+            </div>
+        </form>
+        <div class="message" id="success-message">OK! Now wait until someone on discord messages you.</div>
+    </div>
+    <script>
+        document.getElementById('content-type').addEventListener('change', function() {
+            const publishOptions = document.getElementById('publish-options');
+            const streamOptions = document.getElementById('stream-options');
+            if (this.value === 'publish') {
+                publishOptions.style.display = 'block';
+                streamOptions.style.display = 'none';
+            } else if (this.value === 'stream') {
+                publishOptions.style.display = 'none';
+                streamOptions.style.display = 'block';
+            } else {
+                publishOptions.style.display = 'none';
+                streamOptions.style.display = 'none';
+            }
+        });
+
+        document.getElementById('contact-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting the traditional way
+
+            // Send the form data to the server
+            fetch('http://localhost:3000/submit-form', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams(new FormData(event.target)).toString()
+            })
+            .then(response => response.text())
+            .then(data => {
+                // Display the success message
+                document.getElementById('success-message').style.display = 'block';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
